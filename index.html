@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dominó 2 Jugadores - MVP</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Dominó 2 Jugadores</h1>
+    <p class="subtitle">Versión MVP - Humano vs. Humano local</p>
+  </header>
+
+  <main>
+    <section id="statusBar" aria-live="polite">
+      <p>Estado del juego aparecerá aquí.</p>
+    </section>
+
+    <section id="board" aria-label="Tablero de juego">
+      <div class="board-ends" aria-hidden="true">
+        <span>⇦ Izquierda</span>
+        <span>Derecha ⇨</span>
+      </div>
+      <div id="boardTiles" class="board-tiles" role="list" aria-label="Fichas en el tablero"></div>
+    </section>
+
+    <section id="playerArea" aria-label="Mano del jugador actual">
+      <h2 id="currentPlayerLabel">Turno de: Jugador 1</h2>
+      <div id="playerHand" class="hand" role="list" aria-label="Fichas en mano"></div>
+    </section>
+
+    <section id="controls" aria-label="Controles del turno">
+      <button id="playLeftBtn" class="action" disabled>Jugar a la izquierda</button>
+      <button id="playRightBtn" class="action" disabled>Jugar a la derecha</button>
+      <button id="drawBtn" class="action">Robar</button>
+      <button id="passBtn" class="action">Pasar</button>
+    </section>
+  </main>
+
+  <section id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content">
+      <h2 id="modalTitle">Fin de la ronda</h2>
+      <p id="modalMessage">Mensaje del resultado.</p>
+      <button id="restartBtn" class="action">Reiniciar</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>Dominó MVP — Construido en HTML, CSS y JavaScript puro.</p>
+  </footer>
+
+  <script type="module" src="src/ui.js"></script>
+</body>
+</html>
