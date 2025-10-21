@@ -5,6 +5,8 @@
 
 import { state, initRound } from './game.js';
 
+const hasDOM = typeof window !== 'undefined' && typeof document !== 'undefined';
+
 let boardEl;
 let handEl;
 let statusBarEl;
@@ -128,6 +130,9 @@ function toggleModal(show = false, title = '', message = '') {
 }
 
 function initializeUI() {
+  if (!hasDOM) {
+    return;
+  }
   cacheDomElements();
 
   if (!boardEl || !handEl || !statusBarEl || !currentPlayerLabelEl) {
@@ -142,10 +147,14 @@ function initializeUI() {
   toggleModal(false);
 }
 
-if (document.readyState === 'loading') {
-  window.addEventListener('DOMContentLoaded', initializeUI, { once: true });
+if (hasDOM) {
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initializeUI, { once: true });
+  } else {
+    initializeUI();
+  }
 } else {
-  initializeUI();
+  console.warn('Entorno sin DOM detectado. La inicialización automática de la UI fue omitida.');
 }
 
 // Exportamos funciones para que la lógica pueda disparar re-renderizados.
