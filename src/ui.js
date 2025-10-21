@@ -5,27 +5,38 @@
 
 import { state, initRound } from './game.js';
 
-const boardEl = document.getElementById('boardTiles');
-const handEl = document.getElementById('playerHand');
-const statusBarEl = document.getElementById('statusBar');
-const currentPlayerLabelEl = document.getElementById('currentPlayerLabel');
-const modalEl = document.getElementById('modal');
-const modalTitleEl = document.getElementById('modalTitle');
-const modalMessageEl = document.getElementById('modalMessage');
+let boardEl;
+let handEl;
+let statusBarEl;
+let currentPlayerLabelEl;
+let modalEl;
+let modalTitleEl;
+let modalMessageEl;
 
-const controls = {
-  playLeftBtn: document.getElementById('playLeftBtn'),
-  playRightBtn: document.getElementById('playRightBtn'),
-  drawBtn: document.getElementById('drawBtn'),
-  passBtn: document.getElementById('passBtn'),
-  restartBtn: document.getElementById('restartBtn'),
-};
+const controls = {};
+
+function cacheDomElements() {
+  boardEl = document.getElementById('boardTiles');
+  handEl = document.getElementById('playerHand');
+  statusBarEl = document.getElementById('statusBar');
+  currentPlayerLabelEl = document.getElementById('currentPlayerLabel');
+  modalEl = document.getElementById('modal');
+  modalTitleEl = document.getElementById('modalTitle');
+  modalMessageEl = document.getElementById('modalMessage');
+
+  controls.playLeftBtn = document.getElementById('playLeftBtn');
+  controls.playRightBtn = document.getElementById('playRightBtn');
+  controls.drawBtn = document.getElementById('drawBtn');
+  controls.passBtn = document.getElementById('passBtn');
+  controls.restartBtn = document.getElementById('restartBtn');
+}
 
 /**
  * Renderiza la línea central del tablero usando el estado actual.
  * Por ahora solo pinta fichas como texto simple "x|y".
  */
 function renderBoard() {
+  if (!boardEl) return;
   boardEl.innerHTML = '';
   if (!state.board.length) {
     const placeholder = document.createElement('p');
@@ -50,6 +61,7 @@ function renderBoard() {
  * Más adelante incorporaremos eventos de clic.
  */
 function renderActiveHand() {
+  if (!handEl) return;
   const currentHand = state.hands[state.currentPlayer] || [];
   handEl.innerHTML = '';
 
@@ -99,6 +111,7 @@ function createTileElement(tile) {
  * Actualiza las etiquetas de turno y mensaje general.
  */
 function renderStatus(message = 'Elige una ficha y decide dónde colocarla en la mesa.') {
+  if (!statusBarEl || !currentPlayerLabelEl) return;
   currentPlayerLabelEl.textContent = `Turno de: ${state.currentPlayer === 'p1' ? 'Jugador 1' : 'Jugador 2'}`;
   statusBarEl.innerHTML = `<p>${message}</p>`;
 }
@@ -108,17 +121,32 @@ function renderStatus(message = 'Elige una ficha y decide dónde colocarla en la
  * Para Iteración 0 lo dejamos oculto.
  */
 function toggleModal(show = false, title = '', message = '') {
+  if (!modalEl || !modalTitleEl || !modalMessageEl) return;
   modalEl.setAttribute('aria-hidden', show ? 'false' : 'true');
   modalTitleEl.textContent = title;
   modalMessageEl.textContent = message;
 }
 
-// Render inicial para la Iteración 0
-initRound();
-renderBoard();
-renderActiveHand();
-renderStatus();
-toggleModal(false);
+function initializeUI() {
+  cacheDomElements();
+
+  if (!boardEl || !handEl || !statusBarEl || !currentPlayerLabelEl) {
+    console.warn('No se encontraron los elementos base de la interfaz.');
+    return;
+  }
+
+  initRound();
+  renderBoard();
+  renderActiveHand();
+  renderStatus();
+  toggleModal(false);
+}
+
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', initializeUI, { once: true });
+} else {
+  initializeUI();
+}
 
 // Exportamos funciones para que la lógica pueda disparar re-renderizados.
 export const ui = {
