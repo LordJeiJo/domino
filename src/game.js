@@ -103,13 +103,24 @@ function determineStartingPlayer() {
 /**
  * Configura una ronda nueva con manos y pozo iniciales.
  */
-export function initRound() {
+export function initRound(tileSet = null) {
   resetState();
 
-  state.stock = createDoubleSixSet();
+  const baseTiles = Array.isArray(tileSet) && tileSet.length
+    ? tileSet
+    : createDoubleSixSet();
+
+  state.stock = baseTiles.map((tile) => ({
+    left: Number(tile.left),
+    right: Number(tile.right),
+  })).filter((tile) => Number.isFinite(tile.left) && Number.isFinite(tile.right));
+
   shuffle(state.stock);
 
-  const handSize = 7;
+  const maxHandSize = 7;
+  const availablePairs = Math.floor(state.stock.length / 2);
+  const handSize = Math.min(maxHandSize, availablePairs);
+
   for (let i = 0; i < handSize; i += 1) {
     const tileForP1 = state.stock.pop();
     const tileForP2 = state.stock.pop();

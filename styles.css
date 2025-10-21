@@ -188,6 +188,90 @@ main {
   font-weight: 600;
 }
 
+.custom-tiles-form {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.custom-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 120px;
+}
+
+.custom-input label {
+  font-weight: 600;
+}
+
+.custom-input input {
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(15, 23, 42, 0.2);
+  font-size: 1rem;
+}
+
+.custom-tiles-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.custom-tiles-actions .action {
+  flex-shrink: 0;
+}
+
+.custom-tiles-hint {
+  margin: 0;
+  color: var(--muted-text);
+  font-size: 0.95rem;
+}
+
+.custom-tiles-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.custom-tiles-empty {
+  margin: 0;
+  color: var(--muted-text);
+  font-style: italic;
+}
+
+.custom-tile-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  font-weight: 600;
+}
+
+.custom-tile-item span {
+  font-size: 1rem;
+}
+
+.custom-tile-remove {
+  background: transparent;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.custom-tile-remove:hover,
+.custom-tile-remove:focus {
+  text-decoration: underline;
+}
+
 button.action {
   background: var(--primary-color);
   color: white;
@@ -253,5 +337,15 @@ button.action:hover:not(:disabled) {
 
   #board {
     padding: 1rem;
+  }
+
+  .custom-tiles-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .custom-tiles-actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
