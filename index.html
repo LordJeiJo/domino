@@ -38,6 +38,75 @@
     </section>
 
     <section
+      id="customTiles"
+      class="info-card"
+      aria-label="Gestor de fichas personalizadas"
+    >
+      <h2>Fichas personalizadas</h2>
+      <p>
+        Crea combinaciones especiales para jugar con reglas propias. Puedes
+        guardar tu colección y compartirla con otros jugadores.
+      </p>
+
+      <form id="customTileForm" class="custom-tiles-form">
+        <div class="custom-input">
+          <label for="customTileLeft">Lado izquierdo</label>
+          <input
+            id="customTileLeft"
+            name="customTileLeft"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            max="12"
+            required
+          />
+        </div>
+        <div class="custom-input">
+          <label for="customTileRight">Lado derecho</label>
+          <input
+            id="customTileRight"
+            name="customTileRight"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            max="12"
+            required
+          />
+        </div>
+        <button type="submit" class="action">Agregar ficha</button>
+      </form>
+
+      <div class="custom-tiles-actions">
+        <button id="downloadTilesBtn" class="action" type="button" disabled>
+          Descargar fichas
+        </button>
+        <input
+          id="uploadTilesInput"
+          type="file"
+          accept="application/json"
+          hidden
+        />
+        <button id="uploadTilesBtn" class="action" type="button">
+          Subir fichas
+        </button>
+        <button id="useCustomTilesBtn" class="action" type="button" disabled>
+          Usar fichas personalizadas
+        </button>
+      </div>
+      <p id="customTilesHint" class="custom-tiles-hint">
+        Necesitas al menos 14 fichas para repartir manos completas de 7 por
+        jugador.
+      </p>
+
+      <div
+        id="customTilesList"
+        class="custom-tiles-list"
+        role="list"
+        aria-label="Fichas personalizadas creadas"
+      ></div>
+    </section>
+
+    <section
       id="howToPlay"
       class="info-card"
       aria-label="Guía rápida para aprender a jugar"
