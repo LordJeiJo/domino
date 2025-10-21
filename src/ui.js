@@ -3,7 +3,7 @@
 // Este módulo se encarga de pintar la interfaz inicial del MVP.
 // Más adelante conectaremos eventos y lógica de juego desde aquí.
 
-import { state } from './game.js';
+import { state, initRound } from './game.js';
 
 const boardEl = document.getElementById('boardTiles');
 const handEl = document.getElementById('playerHand');
@@ -98,7 +98,7 @@ function createTileElement(tile) {
 /**
  * Actualiza las etiquetas de turno y mensaje general.
  */
-function renderStatus(message = 'Preparado para jugar.') {
+function renderStatus(message = 'Elige una ficha y decide dónde colocarla en la mesa.') {
   currentPlayerLabelEl.textContent = `Turno de: ${state.currentPlayer === 'p1' ? 'Jugador 1' : 'Jugador 2'}`;
   statusBarEl.innerHTML = `<p>${message}</p>`;
 }
@@ -114,6 +114,7 @@ function toggleModal(show = false, title = '', message = '') {
 }
 
 // Render inicial para la Iteración 0
+initRound();
 renderBoard();
 renderActiveHand();
 renderStatus();
