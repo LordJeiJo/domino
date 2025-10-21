@@ -22,7 +22,32 @@
         <span>⇦ Izquierda</span>
         <span>Derecha ⇨</span>
       </div>
-      <div id="boardTiles" class="board-tiles" role="list" aria-label="Fichas en el tablero"></div>
+      <div class="board-area">
+        <button
+          id="dropLeft"
+          class="drop-zone"
+          data-side="left"
+          type="button"
+          aria-label="Suelta fichas aquí para jugarlas a la izquierda"
+        >
+          Suelta aquí
+        </button>
+        <div
+          id="boardTiles"
+          class="board-tiles"
+          role="list"
+          aria-label="Fichas en el tablero"
+        ></div>
+        <button
+          id="dropRight"
+          class="drop-zone"
+          data-side="right"
+          type="button"
+          aria-label="Suelta fichas aquí para jugarlas a la derecha"
+        >
+          Suelta aquí
+        </button>
+      </div>
     </section>
 
     <section id="playerArea" aria-label="Mano del jugador actual">
@@ -38,72 +63,118 @@
     </section>
 
     <section
-      id="customTiles"
+      id="tileAppearance"
       class="info-card"
-      aria-label="Gestor de fichas personalizadas"
+      aria-label="Personaliza la apariencia de las fichas"
     >
-      <h2>Fichas personalizadas</h2>
+      <h2>Personaliza tus fichas</h2>
       <p>
-        Crea combinaciones especiales para jugar con reglas propias. Puedes
-        guardar tu colección y compartirla con otros jugadores.
+        Por defecto, las fichas muestran números negros sobre fondo blanco.
+        Si prefieres un estilo distinto, sube una imagen para cada número del 0
+        al 6. Idealmente usa imágenes cuadradas para que se vean mejor.
       </p>
 
-      <form id="customTileForm" class="custom-tiles-form">
-        <div class="custom-input">
-          <label for="customTileLeft">Lado izquierdo</label>
+      <div class="tile-image-grid">
+        <div class="tile-image-item" data-number="0">
+          <label for="tileImage0">Número 0</label>
+          <div class="tile-image-preview" id="tilePreview0" aria-hidden="true">
+            <span>0</span>
+          </div>
           <input
-            id="customTileLeft"
-            name="customTileLeft"
-            type="number"
-            inputmode="numeric"
-            min="0"
-            max="12"
-            required
+            id="tileImage0"
+            class="tile-image-input"
+            type="file"
+            accept="image/*"
+            data-number="0"
           />
         </div>
-        <div class="custom-input">
-          <label for="customTileRight">Lado derecho</label>
+        <div class="tile-image-item" data-number="1">
+          <label for="tileImage1">Número 1</label>
+          <div class="tile-image-preview" id="tilePreview1" aria-hidden="true">
+            <span>1</span>
+          </div>
           <input
-            id="customTileRight"
-            name="customTileRight"
-            type="number"
-            inputmode="numeric"
-            min="0"
-            max="12"
-            required
+            id="tileImage1"
+            class="tile-image-input"
+            type="file"
+            accept="image/*"
+            data-number="1"
           />
         </div>
-        <button type="submit" class="action">Agregar ficha</button>
-      </form>
-
-      <div class="custom-tiles-actions">
-        <button id="downloadTilesBtn" class="action" type="button" disabled>
-          Descargar fichas
-        </button>
-        <input
-          id="uploadTilesInput"
-          type="file"
-          accept="application/json"
-          hidden
-        />
-        <button id="uploadTilesBtn" class="action" type="button">
-          Subir fichas
-        </button>
-        <button id="useCustomTilesBtn" class="action" type="button" disabled>
-          Usar fichas personalizadas
-        </button>
+        <div class="tile-image-item" data-number="2">
+          <label for="tileImage2">Número 2</label>
+          <div class="tile-image-preview" id="tilePreview2" aria-hidden="true">
+            <span>2</span>
+          </div>
+          <input
+            id="tileImage2"
+            class="tile-image-input"
+            type="file"
+            accept="image/*"
+            data-number="2"
+          />
+        </div>
+        <div class="tile-image-item" data-number="3">
+          <label for="tileImage3">Número 3</label>
+          <div class="tile-image-preview" id="tilePreview3" aria-hidden="true">
+            <span>3</span>
+          </div>
+          <input
+            id="tileImage3"
+            class="tile-image-input"
+            type="file"
+            accept="image/*"
+            data-number="3"
+          />
+        </div>
+        <div class="tile-image-item" data-number="4">
+          <label for="tileImage4">Número 4</label>
+          <div class="tile-image-preview" id="tilePreview4" aria-hidden="true">
+            <span>4</span>
+          </div>
+          <input
+            id="tileImage4"
+            class="tile-image-input"
+            type="file"
+            accept="image/*"
+            data-number="4"
+          />
+        </div>
+        <div class="tile-image-item" data-number="5">
+          <label for="tileImage5">Número 5</label>
+          <div class="tile-image-preview" id="tilePreview5" aria-hidden="true">
+            <span>5</span>
+          </div>
+          <input
+            id="tileImage5"
+            class="tile-image-input"
+            type="file"
+            accept="image/*"
+            data-number="5"
+          />
+        </div>
+        <div class="tile-image-item" data-number="6">
+          <label for="tileImage6">Número 6</label>
+          <div class="tile-image-preview" id="tilePreview6" aria-hidden="true">
+            <span>6</span>
+          </div>
+          <input
+            id="tileImage6"
+            class="tile-image-input"
+            type="file"
+            accept="image/*"
+            data-number="6"
+          />
+        </div>
       </div>
-      <p id="customTilesHint" class="custom-tiles-hint">
-        Necesitas al menos 14 fichas para repartir manos completas de 7 por
-        jugador.
-      </p>
 
-      <div
-        id="customTilesList"
-        class="custom-tiles-list"
-        role="list"
-        aria-label="Fichas personalizadas creadas"
-      ></div>
+      <button id="resetTileImagesBtn" class="action" type="button">
+        Restablecer imágenes
+      </button>
+      <p class="tile-image-hint">
+        Tus archivos se mantienen solo en esta sesión del navegador; si recargas
+        la página deberás volver a subirlos.
+      </p>
     </section>
 
     <section
@@ -114,23 +185,29 @@
       <h2>¿Cómo se juega?</h2>
       <ol>
         <li>
-          Mira tus fichas en la parte inferior. Cada ficha es como una
-          tarjetita con dos números.
+          Cada jugador recibe siete fichas. Arrastra una ficha desde tu mano
+          hasta el extremo del tablero que prefieras. Cuando la sueltes se
+          colocará automáticamente si coincide con el número del extremo.
         </li>
         <li>
-          Toca o haz clic en la ficha que quieras jugar. Cuando esté
-          seleccionada, usa los botones grandes para ponerla a la izquierda o a
-          la derecha del tablero.
+          Si es la primera ficha de la partida puedes decidir la orientación
+          al soltarla. En turnos siguientes la orientación dependerá del número
+          con el que estés conectando.
         </li>
         <li>
-          Si ninguna ficha encaja, pulsa <strong>Robar</strong> para tomar una
-          nueva. Si aun así no puedes, pulsa <strong>Pasar</strong> y deja que el
-          otro jugador intente.
+          Solo se pueden unir números iguales. Si no tienes jugadas posibles,
+          pulsa <strong>Robar</strong> para tomar una nueva ficha del montón. Si
+          tampoco encaja, usa <strong>Pasar</strong> para ceder el turno.
+        </li>
+        <li>
+          Gana quien se queda sin fichas primero. Si nadie puede jugar, suma el
+          valor de las fichas restantes y gana quien tenga menos puntos.
         </li>
       </ol>
       <p class="info-card__tip">
-        Consejo: Empieza buscando fichas que tengan el mismo número que ves en
-        los extremos del tablero. ¡Así continúa la serpiente!
+        Consejo: procura deshacerte de las fichas dobles y de las más grandes al
+        principio; suelen ser más difíciles de colocar cuando el tablero está
+        avanzado.
       </p>
     </section>
   </main>
