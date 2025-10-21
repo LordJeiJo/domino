@@ -4,6 +4,8 @@
 // DOM directamente; solo contiene el estado y, en iteraciones posteriores,
 // la lógica pura para manipularlo.
 
+let tileCounter = 0;
+
 export const state = {
   stock: [], // fichas en el pozo para robar
   board: [], // fichas colocadas en orden desde izquierda a derecha
@@ -16,6 +18,15 @@ export const state = {
   rightEnd: null, // valor numérico en el extremo derecho del tablero
   lockedTurnsInRow: 0, // cuántos turnos consecutivos sin jugada (para bloqueo)
 };
+
+function createTileObject(left, right) {
+  tileCounter += 1;
+  return {
+    id: `tile-${tileCounter}`,
+    left,
+    right,
+  };
+}
 
 /**
  * Reset suave del estado a su configuración inicial.
@@ -30,6 +41,7 @@ export function resetState() {
   state.leftEnd = null;
   state.rightEnd = null;
   state.lockedTurnsInRow = 0;
+  tileCounter = 0;
 }
 
 /**
@@ -113,7 +125,8 @@ export function initRound(tileSet = null) {
   state.stock = baseTiles.map((tile) => ({
     left: Number(tile.left),
     right: Number(tile.right),
-  })).filter((tile) => Number.isFinite(tile.left) && Number.isFinite(tile.right));
+  })).filter((tile) => Number.isFinite(tile.left) && Number.isFinite(tile.right))
+    .map((tile) => createTileObject(tile.left, tile.right));
 
   shuffle(state.stock);
 
@@ -134,4 +147,115 @@ export function initRound(tileSet = null) {
   }
 
   state.currentPlayer = determineStartingPlayer();
+}
+
+function flipTile(tile) {
+  return {
+    id: tile.id,
+    left: tile.right,
+    right: tile.left,
+  };
+}
+
+function findTileIndex(hand, tileId) {
+  return hand.findIndex((tile) => tile.id === tileId);
+}
+
+function determinePlacement(tile, side) {
+  if (state.board.length === 0) {
+    return {
+      canPlay: true,
+      shouldFlip: false,
+    };
+  }
+
+  if (side === 'left') {
+    if (tile.right === state.leftEnd) {
+      return { canPlay: true, shouldFlip: false };
+    }
+    if (tile.left === state.leftEnd) {
+      return { canPlay: true, shouldFlip: true };
+    }
+  } else if (side === 'right') {
+    if (tile.left === state.rightEnd) {
+      return { canPlay: true, shouldFlip: false };
+    }
+    if (tile.right === state.rightEnd) {
+      return { canPlay: true, shouldFlip: true };
+    }
+  }
+
+  return { canPlay: false };
+}
+
+function updateBoardExtremes(side, placedTile, boardWasEmpty) {
+  if (boardWasEmpty) {
+    state.leftEnd = placedTile.left;
+    state.rightEnd = placedTile.right;
+    return;
+  }
+
+  if (side === 'left') {
+    state.leftEnd = placedTile.left;
+  } else {
+    state.rightEnd = placedTile.right;
+  }
+}
+
+export function getTileFromHand(player, tileId) {
+  const hand = state.hands[player];
+  const index = findTileIndex(hand, tileId);
+  if (index === -1) {
+    return null;
+  }
+  return hand[index];
+}
+
+export function playTile({ player, tileId, side, forceFlip = false }) {
+  if (!player || !tileId || (side !== 'left' && side !== 'right')) {
+    return { success: false, message: 'Movimiento inválido.' };
+  }
+
+  const hand = state.hands[player];
+  const tileIndex = findTileIndex(hand, tileId);
+  if (tileIndex === -1) {
+    return { success: false, message: 'La ficha seleccionada no está en tu mano.' };
+  }
+
+  const tile = hand[tileIndex];
+  const boardWasEmpty = state.board.length === 0;
+
+  let shouldFlip = false;
+  if (boardWasEmpty) {
+    shouldFlip = Boolean(forceFlip);
+  } else {
+    const placement = determinePlacement(tile, side);
+    if (!placement.canPlay) {
+      return { success: false, message: 'Esa ficha no encaja en ese extremo.' };
+    }
+    shouldFlip = placement.shouldFlip;
+  }
+
+  const placedTile = shouldFlip ? flipTile(tile) : { ...tile };
+
+  hand.splice(tileIndex, 1);
+
+  if (boardWasEmpty) {
+    state.board.push(placedTile);
+  } else if (side === 'left') {
+    state.board.unshift(placedTile);
+  } else {
+    state.board.push(placedTile);
+  }
+
+  updateBoardExtremes(side, placedTile, boardWasEmpty);
+  state.lockedTurnsInRow = 0;
+  state.currentPlayer = state.currentPlayer === 'p1' ? 'p2' : 'p1';
+
+  return { success: true, tile: placedTile };
+}
+
+export function canPlaceTile(tile, side) {
+  const placement = determinePlacement(tile, side);
+  return placement.canPlay;
 }
