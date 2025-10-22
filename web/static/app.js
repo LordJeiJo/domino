@@ -10,11 +10,94 @@ const dropZones = Array.from(document.querySelectorAll(".drop-zone"));
 const drawBtn = document.getElementById("draw-btn");
 const passBtn = document.getElementById("pass-btn");
 const resetBtn = document.getElementById("reset-btn");
+const tileUploadInputs = Array.from(document.querySelectorAll("[data-tile-upload]"));
+const tileResetButtons = Array.from(document.querySelectorAll("[data-tile-reset]"));
+const tileFeedbackEl = document.getElementById("tile-feedback");
+
+const ACCEPTED_TILE_IMAGE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"];
+const ACCEPTED_TILE_IMAGE_EXTENSIONS = ["png", "jpg", "jpeg", "svg"];
+const MAX_TILE_IMAGE_SIZE = 512 * 1024; // 512 KB
+const DEFAULT_TILE_IMAGES = Array.from({ length: 7 }, (_, value) => `assets/tiles/${value}.svg`);
+const tileImageSources = DEFAULT_TILE_IMAGES.slice();
 
 let state = createEmptyState();
 let legalMap = new Map();
 let currentDrag = null;
 let opponentTimer = null;
+
+function setTileFeedback(message, variant = "info") {
+  if (!tileFeedbackEl) {
+    return;
+  }
+  tileFeedbackEl.textContent = message;
+  if (!message) {
+    delete tileFeedbackEl.dataset.variant;
+  } else {
+    tileFeedbackEl.dataset.variant = variant ?? "";
+  }
+}
+
+function isAllowedTileImage(file) {
+  if (!file) {
+    return false;
+  }
+  const mimeAllowed = !file.type || ACCEPTED_TILE_IMAGE_TYPES.includes(file.type);
+  const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
+  const extensionAllowed = ACCEPTED_TILE_IMAGE_EXTENSIONS.includes(extension);
+  return mimeAllowed || extensionAllowed;
+}
+
+function getTileImage(value) {
+  return tileImageSources[value] ?? DEFAULT_TILE_IMAGES[value] ?? DEFAULT_TILE_IMAGES[0];
+}
+
+function handleTileUploadChange(input) {
+  const value = Number.parseInt(input.dataset.tileUpload ?? "", 10);
+  if (Number.isNaN(value) || value < 0 || value >= DEFAULT_TILE_IMAGES.length) {
+    return;
+  }
+  const file = input.files?.[0];
+  if (!file) {
+    setTileFeedback("No se seleccionó ningún archivo.", "warning");
+    return;
+  }
+  if (!isAllowedTileImage(file)) {
+    setTileFeedback("El archivo debe ser PNG, JPG o SVG.", "error");
+    input.value = "";
+    return;
+  }
+  if (file.size > MAX_TILE_IMAGE_SIZE) {
+    setTileFeedback("El archivo supera el límite de 512 KB.", "error");
+    input.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.addEventListener("load", () => {
+    tileImageSources[value] = reader.result;
+    setTileFeedback(`Imagen personalizada cargada para el valor ${value}.`, "success");
+    updateUI();
+  });
+  reader.addEventListener("error", () => {
+    setTileFeedback("No se pudo leer el archivo seleccionado.", "error");
+    input.value = "";
+  });
+  reader.readAsDataURL(file);
+}
+
+function handleTileReset(button) {
+  const value = Number.parseInt(button.dataset.tileReset ?? "", 10);
+  if (Number.isNaN(value) || value < 0 || value >= DEFAULT_TILE_IMAGES.length) {
+    return;
+  }
+  tileImageSources[value] = DEFAULT_TILE_IMAGES[value];
+  const input = document.querySelector(`[data-tile-upload="${value}"]`);
+  if (input) {
+    input.value = "";
+  }
+  setTileFeedback(`Se restableció la imagen del valor ${value}.`, "success");
+  updateUI();
+}
 
 function createEmptyState() {
   return {
@@ -319,6 +402,34 @@ function updateUI() {
   updateControls();
 }
 
+function describeTile(tile) {
+  return `Ficha con valores ${tile[0]} y ${tile[1]}`;
+}
+
+function createTileFace(value) {
+  const face = document.createElement("div");
+  face.className = "tile-face";
+  const img = document.createElement("img");
+  img.src = getTileImage(value);
+  img.alt = "";
+  img.decoding = "async";
+  img.loading = "lazy";
+  face.append(img);
+  return face;
+}
+
+function createTileVisual(tile) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "tile-visual";
+  const leftFace = createTileFace(tile[0]);
+  const divider = document.createElement("span");
+  divider.className = "tile-divider";
+  divider.setAttribute("aria-hidden", "true");
+  const rightFace = createTileFace(tile[1]);
+  wrapper.append(leftFace, divider, rightFace);
+  return wrapper;
+}
+
 function updateBoard() {
   boardEl.innerHTML = "";
   const tiles = state.board;
@@ -329,8 +440,9 @@ function updateBoard() {
   } else {
     tiles.forEach((tile) => {
       const el = document.createElement("div");
-      el.className = "board-tile";
-      el.textContent = `[${tile[0]}|${tile[1]}]`;
+      el.className = "board-tile domino-tile";
+      el.setAttribute("aria-label", describeTile(tile));
+      el.append(createTileVisual(tile));
       boardEl.append(el);
     });
   }
@@ -353,8 +465,9 @@ function updateHand() {
   const playersTurn = isPlayersTurn();
   hand.forEach((tile, index) => {
     const el = document.createElement("div");
-    el.className = "hand-tile";
-    el.textContent = `[${tile[0]}|${tile[1]}]`;
+    el.className = "hand-tile domino-tile";
+    el.setAttribute("aria-label", describeTile(tile));
+    el.append(createTileVisual(tile));
     const ends = legalMap.get(index) ?? [];
     const playable = playersTurn && ends.length > 0;
     el.draggable = playable;
@@ -473,9 +586,19 @@ dropZones.forEach((zone) => {
     }
     const { index } = currentDrag;
     currentDrag = null;
-    handlePlayerMove(index, end);
+  handlePlayerMove(index, end);
   });
 });
+
+tileUploadInputs.forEach((input) => {
+  input.addEventListener("change", () => handleTileUploadChange(input));
+});
+
+tileResetButtons.forEach((button) => {
+  button.addEventListener("click", () => handleTileReset(button));
+});
+
+setTileFeedback("Selecciona una imagen para reemplazar un valor concreto.");
 
 drawBtn.addEventListener("click", () => {
   if (!isPlayersTurn()) {

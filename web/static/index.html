@@ -30,6 +30,106 @@
         <div id="hand" class="hand-tiles"></div>
       </section>
 
+      <section class="customization" aria-label="Personaliza las fichas">
+        <h2>Personaliza las fichas</h2>
+        <p>
+          Puedes sustituir las imágenes por defecto (0 al 6) por tus propios archivos PNG,
+          JPG o SVG. Las imágenes se almacenan localmente mientras la página permanezca abierta.
+        </p>
+        <form class="tile-upload-form" aria-describedby="tile-guidelines tile-feedback">
+          <div class="tile-upload-grid">
+            <div class="upload-field">
+              <label for="tile-upload-0" class="upload-label">Valor 0</label>
+              <div class="upload-controls">
+                <input
+                  id="tile-upload-0"
+                  type="file"
+                  accept="image/png,image/jpeg,image/svg+xml"
+                  data-tile-upload="0"
+                />
+                <button type="button" class="reset-upload" data-tile-reset="0">Restablecer</button>
+              </div>
+            </div>
+            <div class="upload-field">
+              <label for="tile-upload-1" class="upload-label">Valor 1</label>
+              <div class="upload-controls">
+                <input
+                  id="tile-upload-1"
+                  type="file"
+                  accept="image/png,image/jpeg,image/svg+xml"
+                  data-tile-upload="1"
+                />
+                <button type="button" class="reset-upload" data-tile-reset="1">Restablecer</button>
+              </div>
+            </div>
+            <div class="upload-field">
+              <label for="tile-upload-2" class="upload-label">Valor 2</label>
+              <div class="upload-controls">
+                <input
+                  id="tile-upload-2"
+                  type="file"
+                  accept="image/png,image/jpeg,image/svg+xml"
+                  data-tile-upload="2"
+                />
+                <button type="button" class="reset-upload" data-tile-reset="2">Restablecer</button>
+              </div>
+            </div>
+            <div class="upload-field">
+              <label for="tile-upload-3" class="upload-label">Valor 3</label>
+              <div class="upload-controls">
+                <input
+                  id="tile-upload-3"
+                  type="file"
+                  accept="image/png,image/jpeg,image/svg+xml"
+                  data-tile-upload="3"
+                />
+                <button type="button" class="reset-upload" data-tile-reset="3">Restablecer</button>
+              </div>
+            </div>
+            <div class="upload-field">
+              <label for="tile-upload-4" class="upload-label">Valor 4</label>
+              <div class="upload-controls">
+                <input
+                  id="tile-upload-4"
+                  type="file"
+                  accept="image/png,image/jpeg,image/svg+xml"
+                  data-tile-upload="4"
+                />
+                <button type="button" class="reset-upload" data-tile-reset="4">Restablecer</button>
+              </div>
+            </div>
+            <div class="upload-field">
+              <label for="tile-upload-5" class="upload-label">Valor 5</label>
+              <div class="upload-controls">
+                <input
+                  id="tile-upload-5"
+                  type="file"
+                  accept="image/png,image/jpeg,image/svg+xml"
+                  data-tile-upload="5"
+                />
+                <button type="button" class="reset-upload" data-tile-reset="5">Restablecer</button>
+              </div>
+            </div>
+            <div class="upload-field">
+              <label for="tile-upload-6" class="upload-label">Valor 6</label>
+              <div class="upload-controls">
+                <input
+                  id="tile-upload-6"
+                  type="file"
+                  accept="image/png,image/jpeg,image/svg+xml"
+                  data-tile-upload="6"
+                />
+                <button type="button" class="reset-upload" data-tile-reset="6">Restablecer</button>
+              </div>
+            </div>
+          </div>
+          <p id="tile-guidelines" class="helper-text">
+            Tamaño máximo por archivo: 512&nbsp;KB. Usa imágenes cuadradas para obtener mejores resultados.
+          </p>
+          <p id="tile-feedback" class="helper-text" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
       <section class="controls">
         <button id="draw-btn" type="button">Robar</button>
         <button id="pass-btn" type="button">Pasar</button>
