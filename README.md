@@ -19,6 +19,17 @@ Pequeño prototipo web para jugar una partida rápida de dominó entre dos perso
 3. Arrastra una ficha desde tu mano hasta alguno de los extremos señalados o selecciona la ficha y usa los botones «Jugar a la izquierda/derecha».
 4. Si te quedas sin jugadas, pulsa «Robar»; si tampoco puedes jugar, «Pasar» cede el turno.
 
+### Versión Kivy de escritorio (experimental)
+
+Si prefieres una interfaz nativa utilizando [Kivy](https://kivy.org), puedes ejecutar una versión mínima incluida en `domino.py`:
+
+```bash
+python -m pip install kivy
+python domino.py
+```
+
+Esta versión crea el tablero con tres contenedores (`ia`, `tablero` y `jugador`) y, al iniciar, reparte automáticamente las manos mostrando las fichas del jugador en pantalla.
+
 > 💡 Consejo: si personalizas las fichas con imágenes, recuerda que sólo se guardan en la sesión actual del navegador.
 
 ## Desarrollo
