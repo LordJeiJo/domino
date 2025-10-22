@@ -1,53 +1,31 @@
-# Dominó 2 jugadores (MVP)
+# Domino Game
 
-Pequeño prototipo web para jugar una partida rápida de dominó entre dos personas en el mismo dispositivo. El objetivo es validar la jugabilidad básica sin depender de frameworks ni backends: todo ocurre en el navegador con HTML, CSS y JavaScript modernos.
+This project provides a minimal, fully playable domino game for the terminal. It
+uses the classic double-six set and pits a human player against a simple
+computer opponent. The goal is to be the first to play all tiles or finish with
+the lowest pip total if the game becomes blocked.
 
-## Características principales
+## Requirements
 
-- Generación automática del set clásico doble-seis.
-- Reparto inicial aleatorio (7 fichas por jugador) y control de turnos.
-- Interacción por drag & drop o botones para jugar a izquierda/derecha.
-- Indicadores visuales del extremo donde sueltas la ficha.
-- Representación renovada de las fichas con pips (puntos) al estilo tradicional.
-- Personalización opcional de las caras mediante imágenes locales.
-- Modal de fin de ronda con opción para reiniciar la partida.
+- Python 3.9 or newer (no third-party dependencies required)
 
-## Cómo probarlo
-
-1. Clona este repositorio y entra en la carpeta del proyecto.
-2. Abre `index.html` directamente en tu navegador favorito (Chrome, Firefox, Edge, Safari moderno). No necesitas servidor.
-3. Arrastra una ficha desde tu mano hasta alguno de los extremos señalados o selecciona la ficha y usa los botones «Jugar a la izquierda/derecha».
-4. Si te quedas sin jugadas, pulsa «Robar»; si tampoco puedes jugar, «Pasar» cede el turno.
-
-### Versión Kivy de escritorio (experimental)
-
-Si prefieres una interfaz nativa utilizando [Kivy](https://kivy.org), puedes ejecutar una versión mínima incluida en `domino.py`:
+## Running the Game
 
 ```bash
-python -m pip install kivy
-python domino.py
+python3 domino.py
 ```
 
-Esta versión crea el tablero con tres contenedores (`ia`, `tablero` y `jugador`) y, al iniciar, reparte automáticamente las manos mostrando las fichas del jugador en pantalla.
+## How to Play
 
-> 💡 Consejo: si personalizas las fichas con imágenes, recuerda que sólo se guardan en la sesión actual del navegador.
+1. The game shuffles a double-six set and deals seven tiles to each player.
+2. On your turn, review the board that shows the current chain of tiles and the
+   open ends.
+3. Choose a tile from your hand by entering its number. If the tile can be
+   played on both ends, you will be asked to choose which end to use.
+4. If you cannot play, the game automatically draws from the boneyard. If no
+   tiles remain, you must pass.
+5. The computer follows the same rules, choosing the first legal move it finds.
+6. The game ends when one player has no tiles left or when both players are
+   forced to pass. In the latter case, the player with the lower pip total wins.
 
-## Desarrollo
-
-El proyecto está dividido en módulos simples dentro de `src/`:
-
-- `game.js`: estado global y reglas básicas de dominó.
-- `ui.js`: renderizado y eventos del DOM.
-- `deck.js`: utilidades para generar y barajar fichas.
-- `utils.js`: helpers compartidos (por ejemplo, para formatos de texto).
-
-No hay dependencias externas. Puedes modificar los módulos y recargar la página para ver los cambios. Si necesitas lanzar un servidor local, bastará con `npx serve` o cualquier servidor estático.
-
-## Próximos pasos sugeridos
-
-- Añadir conteo automático de puntos cuando se cierre una ronda.
-- Implementar una IA sencilla para practicar contra el ordenador.
-- Guardar la partida en `localStorage` para continuar después.
-- Adaptar la UI a pantallas pequeñas con una disposición vertical.
-
-¡Disfruta el juego y gracias por las pruebas!
+Enjoy a quick game of dominoes directly from your terminal!
