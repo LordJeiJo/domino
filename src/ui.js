@@ -62,6 +62,7 @@ function cacheDomElements() {
 function createTileFace(value, position) {
   const faceEl = document.createElement('div');
   faceEl.className = `tile-face tile-${position}`;
+  faceEl.dataset.value = String(value);
 
   const storedImage = tileImages.get(value);
   if (storedImage) {
@@ -70,11 +71,34 @@ function createTileFace(value, position) {
     img.src = storedImage;
     img.alt = `Número ${value}`;
     faceEl.appendChild(img);
-  } else {
-    const span = document.createElement('span');
-    span.textContent = value;
-    faceEl.appendChild(span);
+    return faceEl;
   }
+
+  faceEl.classList.add('tile-face--pips');
+
+  const visuallyHidden = document.createElement('span');
+  visuallyHidden.className = 'visually-hidden';
+  visuallyHidden.textContent = String(value);
+  faceEl.appendChild(visuallyHidden);
+
+  const pipPatterns = {
+    0: [],
+    1: ['center'],
+    2: ['top-left', 'bottom-right'],
+    3: ['top-left', 'center', 'bottom-right'],
+    4: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+    5: ['top-left', 'top-right', 'center', 'bottom-left', 'bottom-right'],
+    6: ['top-left', 'top-right', 'middle-left', 'middle-right', 'bottom-left', 'bottom-right'],
+  };
+
+  const numericValue = Number(value);
+  const positions = pipPatterns[numericValue] || [];
+  positions.forEach((positionClass) => {
+    const pip = document.createElement('span');
+    pip.className = `pip pip--${positionClass}`;
+    pip.setAttribute('aria-hidden', 'true');
+    faceEl.appendChild(pip);
+  });
 
   return faceEl;
 }
