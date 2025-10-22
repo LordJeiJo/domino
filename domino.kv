@@ -18,6 +18,13 @@
     padding: "16dp"
     spacing: "14dp"
 
+    canvas.before:
+        Color:
+            rgba: (0.1, 0.3, 0.1, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
     BoxLayout:
         id: ai_hand
         size_hint_y: None
