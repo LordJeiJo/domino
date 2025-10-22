@@ -157,23 +157,74 @@ class DominoGame:
             print(f"You played {self.format_tile(tile)} on the {'left' if end == 'L' else 'right'} end.")
             return True
 
+    @staticmethod
+    def _tile_art(tile: Tile) -> Tuple[str, str, str]:
+        return ("┌───┐", f"│{tile[0]}|{tile[1]}│", "└───┘")
+
+    @staticmethod
+    def _chunked(iterable: Sequence[Tile], size: int) -> List[List[Tile]]:
+        return [list(iterable[i : i + size]) for i in range(0, len(iterable), size)]
+
+    def _render_tiles(self, tiles: Sequence[Tile]) -> str:
+        lines: List[str] = []
+        chunks = self._chunked(tiles, 9)
+        for index, chunk in enumerate(chunks):
+            top_line = []
+            middle_line = []
+            bottom_line = []
+            for tile in chunk:
+                top, middle, bottom = self._tile_art(tile)
+                top_line.append(top)
+                middle_line.append(middle)
+                bottom_line.append(bottom)
+            lines.extend([
+                " ".join(top_line),
+                " ".join(middle_line),
+                " ".join(bottom_line),
+            ])
+            if index != len(chunks) - 1:
+                lines.append("")
+        return "\n".join(lines).rstrip()
+
+    def _render_hand(self, hand: Sequence[Tile], playable_indices: Sequence[int]) -> str:
+        playable_set = set(playable_indices)
+        lines: List[str] = []
+        for chunk_start in range(0, len(hand), 9):
+            chunk = hand[chunk_start : chunk_start + 9]
+            indices_line = []
+            art_lines = ["", "", ""]
+            for offset, tile in enumerate(chunk):
+                idx = chunk_start + offset
+                marker = "*" if idx in playable_set else " "
+                indices_line.append(f"{idx + 1:2d}{marker}")
+                top, middle, bottom = self._tile_art(tile)
+                art_lines[0] += top + " "
+                art_lines[1] += middle + " "
+                art_lines[2] += bottom + " "
+            lines.append("  " + "   ".join(indices_line))
+            lines.extend(line.rstrip() for line in art_lines)
+        return "\n".join(lines)
+
     def _show_board(self) -> None:
         if not self.board:
             print("Board is empty.")
             return
-        board_str = "".join(self.format_tile(tile) for tile in self.board)
+        board_art = self._render_tiles(self.board)
         ends = self.board_ends()
         if ends is None:
             raise RuntimeError("Board ends requested while board is empty")
         left_end, right_end = ends
-        print(f"Board: {board_str} (open ends: {left_end} / {right_end})")
+        print("Board:")
+        print(board_art)
+        print(f"Open ends: {left_end} / {right_end}")
 
     def _show_hand(self, hand: Sequence[Tile], moves: List[Move]) -> None:
         playable_indices = {move.index for move in moves}
         print("Your hand:")
-        for i, tile in enumerate(hand, start=1):
-            marker = "*" if (i - 1) in playable_indices else " "
-            print(f"  {i:2d}. {self.format_tile(tile)}{marker}")
+        if not hand:
+            print("  (empty)")
+        else:
+            print(self._render_hand(hand, sorted(playable_indices)))
         print("Tiles marked with * are playable.")
 
     def _choose_end(self, move: Move) -> str:
