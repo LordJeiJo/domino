@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Domino en la Web</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <header>
+        <h1>Domino</h1>
+        <p class="subtitle">Arrastra una ficha hacia el extremo disponible para jugar.</p>
+      </header>
+
+      <section id="status" class="status"></section>
+
+      <section class="board" aria-label="Tablero">
+        <div class="drop-zone" data-end="L" aria-label="Extremo izquierdo"></div>
+        <div id="board" class="board-tiles"></div>
+        <div class="drop-zone" data-end="R" aria-label="Extremo derecho"></div>
+      </section>
+
+      <section class="opponent" aria-label="Oponente">
+        <h2>Oponente</h2>
+        <p>Fichas restantes: <span id="opponent-count">0</span></p>
+      </section>
+
+      <section class="hand" aria-label="Tu mano">
+        <h2>Tu mano</h2>
+        <div id="hand" class="hand-tiles"></div>
+      </section>
+
+      <section class="controls">
+        <button id="draw-btn" type="button">Robar</button>
+        <button id="pass-btn" type="button">Pasar</button>
+        <button id="reset-btn" type="button">Reiniciar</button>
+      </section>
+    </main>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
