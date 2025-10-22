@@ -160,11 +160,91 @@ main {
   justify-content: center;
   text-align: center;
   background: #ffffff;
+  position: relative;
 }
 
-.tile-face span {
+.tile-face > span:not(.visually-hidden) {
   display: inline-block;
   width: 100%;
+}
+
+.tile-face--pips {
+  padding: 0.35rem;
+}
+
+.tile-face--pips .pip {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--tile-border);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.2);
+}
+
+.tile-face--pips .pip::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.tile-face--pips .pip::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--tile-border);
+}
+
+.pip--top-left {
+  top: 6px;
+  left: 8px;
+}
+
+.pip--top-right {
+  top: 6px;
+  right: 8px;
+}
+
+.pip--middle-left {
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+}
+
+.pip--middle-right {
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+}
+
+.pip--center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.pip--bottom-left {
+  bottom: 6px;
+  left: 8px;
+}
+
+.pip--bottom-right {
+  bottom: 6px;
+  right: 8px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .tile-face--image {
