@@ -223,7 +223,13 @@ function handleTileDrop(event) {
   target.classList.remove('dragover');
 
   const side = target.dataset.side === 'left' ? 'left' : 'right';
-  const droppedId = event.dataTransfer?.getData('text/plain') || draggedTileId;
+  let droppedId = draggedTileId;
+  if (event.dataTransfer && typeof event.dataTransfer.getData === 'function') {
+    const transferredId = event.dataTransfer.getData('text/plain');
+    if (transferredId) {
+      droppedId = transferredId;
+    }
+  }
   if (!droppedId) {
     renderStatus('Arrastra una ficha desde tu mano hacia el tablero.');
     return;
